@@ -1,0 +1,12 @@
+.button1:hover { 
+    background-color: #ED7628;
+}
+.center{
+    width: 1000px;
+    height: 500px;
+    top: 50%;
+    left: 30%;
+    position: absolute;
+    margin-top: -200px;
+    margin-left: -250px;
+}
