@@ -59,16 +59,10 @@ $(document).ready( function () {
 				type: 'GET',
 				success: function(success) {
 					if (success.lastblock == undefined){
-						// if (success.network.reward){
-						// 	coin_details[item[1] + "-difficulty"] = success.network.difficulty;
-						// 	coin_details[item[1] + "-reward"] = success.network.reward;
-						// }
-						var currentTime = new Date().getTime();
-						while (currentTime + 2000 >= new Date().getTime()){
-
+						if (success.network.reward){
+							coin_details[item[1] + "-difficulty"] = success.network.difficulty;
+							coin_details[item[1] + "-reward"] = success.network.reward;
 						}
-						coin_details[item[1] + "-difficulty"] = success.network.difficulty;
-						coin_details[item[1] + "-reward"] = success.lastblock.reward;
 					} else {
 						coin_details[item[1] + "-difficulty"] = success.network.difficulty;
 						coin_details[item[1] + "-reward"] = success.lastblock.reward;
