@@ -25,6 +25,7 @@ $(document).ready( function () {
 	$("#hashrate").change(function(){
         // profitCalculation(list_coins);
         console.log("fds",coin_details);
+        getProfit(list_coins, coin_details);
     });
 
 	window.setInterval(function(){
@@ -43,7 +44,7 @@ $(document).ready( function () {
 		return profit_of_coin
 	}
 
-	coin_details = {}
+	var coin_details = {}
 	getDetails(list_coins);
 
 	function getDetails(main_list){
@@ -64,14 +65,26 @@ $(document).ready( function () {
 					}
 					count++;
 					if (count == 9){
-						for (var i =0; i < main_list.length; i++){
-							// console.log(main_list[i][1], coin_details[main_list[i][1].toString() +"-difficulty"])
-							finalProfit(coin_details[main_list[i][1].toString() +"-difficulty"], coin_details[main_list[i][1].toString() +"-reward"], main_list[i][1]);
-						}
+						console.log(coin_details);
+						getProfit(main_list, coin_details)
 					}
 				}
 			});
 		});
+	}
+
+	function getProfit(main_list, coin_details){
+		for (var i =0; i < main_list.length; i++){
+			var a = finalProfit(coin_details[main_list[i][1].toString() +"-difficulty"], coin_details[main_list[i][1].toString() +"-reward"], main_list[i][1]);
+			console.log(a);
+			$.ajax({
+				url: 'https://api.cryptonator.com/api/ticker/'+main_list[i][1].toLowerCase()+'-usd',
+				type: 'GET',
+				success: function(success){
+					console.log(success, this.url);
+				}
+			})
+		}
 	}
 
 } );
