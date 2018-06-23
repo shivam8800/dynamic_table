@@ -21,13 +21,33 @@ $(document).ready( function () {
 	
 
 	$("#hashrate").change(function(){
-        $("#coins_data > tbody").html("");
         getProfit(list_coins, coin_details);
+    });
+
+    $('#first').click(function(){
+    	$('#hashrate').val(220);
+    	getProfit(list_coins, coin_details);
+    });
+    
+    $('#second').click(function(){
+    	$('#hashrate').val(20);
+    	getProfit(list_coins, coin_details);
+    });
+    
+    $('#third').click(function(){
+    	$('#hashrate').val(40);
+    	getProfit(list_coins, coin_details);
+    });
+
+    $('#forth').click(function(){
+    	$('#hashrate').val(70);
+    	getProfit(list_coins, coin_details);
     });
 
 	window.setInterval(function(){
 		getDetails(list_coins);
 	}, 300000);
+
 
 	function finalProfit(coin_difficulty,coin_reward, coin){
 		var hashRate = $('#hashrate').val();
@@ -71,6 +91,7 @@ $(document).ready( function () {
 	};
 
 	function getProfit(main_list, coin_details){
+    	$("#coins_data > tbody").html("");
 		final_list = []
 		var counter = 0;
 		for (var i =0; i < main_list.length; i++){
