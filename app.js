@@ -116,11 +116,33 @@ $(document).ready( function () {
 					
 					counter++;
 					if (counter == 9){
-						for(var j=0; j < final_list.length; j++ ){
 
-							var coin = final_list[j]['coin'];
+						function sortOnKeys(array) {
+							var sorted = []
+							for (var i = 0; i < array.length; i++) {
+								var key = array[i]['coin'] + '-usd'
+								sorted[sorted.length] = array[i][key]
+							}
+							sorted.sort(function(a, b){return b-a});
+							var tempArray = [];
+							for (var i = 0; i < sorted.length; i++) {
+								for (var j = 0; j < array.length; j++) {
+									var key = array[j]['coin'] + '-usd'
+									if (sorted[i] == array[j][key]) {
+										tempArray.push(array[j]);
+									};
+								};
+							};
+							return tempArray;
+						};
 
-							var rowHTML = '<tr><td>'+ final_list[j]['coin'].toUpperCase() +'</td><td>Official Site</td><td>Algorithm</td><td>Wallet</td><td>'+ final_list[j][coin+ "-mbtc"] +'</td><td>'+ final_list[j][coin+ "-usd"] +'</td><td>Cell</td><td><a class="btn btn-primary button1" href="#" role="button"> Start Mining </a></td></tr>';
+						var main_array = sortOnKeys(final_list);
+
+						for(var j=0; j < main_array.length; j++ ){
+
+							var coin = main_array[j]['coin'];
+
+							var rowHTML = '<tr><td>'+ main_array[j]['coin'].toUpperCase() +'</td><td>Official Site</td><td>Algorithm</td><td>Wallet</td><td>'+ main_array[j][coin+ "-mbtc"] +'</td><td>'+ main_array[j][coin+ "-usd"] +'</td><td>Cell</td><td><a class="btn btn-primary button1" href="#" role="button"> Start Mining </a></td></tr>';
 						
 							$("table tbody").append(rowHTML);
 
