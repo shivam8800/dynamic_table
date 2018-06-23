@@ -82,7 +82,6 @@ $(document).ready( function () {
 					}
 					count++;
 					if (count == 9){
-						console.log(coin_details);
 						getProfit(main_list, coin_details)
 					}
 				}
@@ -116,7 +115,6 @@ $(document).ready( function () {
 					
 					counter++;
 					if (counter == 9){
-
 						function sortOnKeys(array) {
 							var sorted = []
 							for (var i = 0; i < array.length; i++) {
@@ -136,12 +134,14 @@ $(document).ready( function () {
 							return tempArray;
 						};
 
-						var main_array = sortOnKeys(final_list);
-
+						if ($('#hashrate').val() == ""){
+							var main_array = final_list;
+						} else {
+							var main_array = sortOnKeys(final_list);
+						}
 						for(var j=0; j < main_array.length; j++ ){
 
 							var coin = main_array[j]['coin'];
-
 							var rowHTML = '<tr><td>'+ main_array[j]['coin'].toUpperCase() +'</td><td>Official Site</td><td>Algorithm</td><td>Wallet</td><td>'+ main_array[j][coin+ "-mbtc"] +'</td><td>'+ main_array[j][coin+ "-usd"] +'</td><td>Cell</td><td><a class="btn btn-primary button1" href="#" role="button"> Start Mining </a></td></tr>';
 						
 							$("table tbody").append(rowHTML);
