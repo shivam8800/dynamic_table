@@ -1,30 +1,27 @@
 $(document).ready( function () {
-	// Initialize tooltip component
 	$(function () {
 	  $('[data-toggle="tooltip"]').tooltip()
 	})
 
-	// Initialize popover component
 	$(function () {
 	  $('[data-toggle="popover"]').popover()
 	});
 
 	var list_coins = [ 
-		['bytecoin','BCN','http://bcn.superpools.online:8117/stats'], 
-		['digitalnote','XDN', 'http://xdn.superpools.online:8117/stats'], 
-		[ 'monero_original','XMO', 'http://xmo.superpools.online:8117/stats'],
-		[ 'monero_classic','XMC', 'http://xmo.superpools.online:2117/stats'], 
-		['dero','DERO', 'http://dero.superpools.online:1117/stats'], 
-		['sumo','SUMO', 'http://sumo.superpools.online:4117/stats'], 
-		['karbo','KRB', 'http://krb.superpools.online:8117/stats'], 
-		['newton','NCP', 'http://ncp.superpools.online:8117/stats'], 
-		['plura','PLURA', 'http://plura.superpools.online:8117/stats']
+		['bytecoin','BCN','http://bcn.superpools.online:8117/stats', 'https://api.coingecko.com/api/v3/coins/bytecoin'], 
+		['digitalnote','XDN', 'http://xdn.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/digitalnote'], 
+		[ 'monero_original','XMO', 'http://xmo.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/monero-original'],
+		[ 'monero_classic','XMC', 'http://xmo.superpools.online:2117/stats','https://api.coingecko.com/api/v3/coins/monero-classic'], 
+		['dero','DERO', 'http://dero.superpools.online:1117/stats','https://api.coingecko.com/api/v3/coins/dero'], 
+		['sumo','SUMO', 'http://sumo.superpools.online:4117/stats', 'https://api.coingecko.com/api/v3/coins/sumokoin'], 
+		['karbo','KRB', 'http://krb.superpools.online:8117/stats', 'https://api.coingecko.com/api/v3/coins/karbo'], 
+		['newton','NCP', 'http://ncp.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/newton-coin-project'], 
+		['plura','PLURA', 'http://plura.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/pluracoin']
 		]
 	
 
 	$("#hashrate").change(function(){
-        // profitCalculation(list_coins);
-        console.log("fds",coin_details);
+        $("#coins_data > tbody").html("");
         getProfit(list_coins, coin_details);
     });
 
@@ -44,7 +41,7 @@ $(document).ready( function () {
 		return profit_of_coin
 	}
 
-	var coin_details = {}
+	coin_details = {}
 	getDetails(list_coins);
 
 	function getDetails(main_list){
@@ -71,17 +68,43 @@ $(document).ready( function () {
 				}
 			});
 		});
-	}
+	};
 
 	function getProfit(main_list, coin_details){
+		final_list = []
+		var counter = 0;
 		for (var i =0; i < main_list.length; i++){
-			var a = finalProfit(coin_details[main_list[i][1].toString() +"-difficulty"], coin_details[main_list[i][1].toString() +"-reward"], main_list[i][1]);
-			console.log(a);
+			
 			$.ajax({
-				url: 'https://api.cryptonator.com/api/ticker/'+main_list[i][1].toLowerCase()+'-usd',
+				url: main_list[i][3],
 				type: 'GET',
 				success: function(success){
-					console.log(success, this.url);
+
+
+					var a = finalProfit(coin_details[success.symbol.toUpperCase() +"-difficulty"], coin_details[success.symbol.toUpperCase() +"-reward"], success.symbol);
+
+
+					one_coin_data = {}
+					one_coin_data[success.symbol + "-usd"] = success.market_data.current_price.usd * a[success.symbol];
+
+					one_coin_data[success.symbol + "-mbtc"] = success.market_data.current_price.btc / 1000 * a[success.symbol];
+						
+					one_coin_data["coin"] =success.symbol;
+
+					final_list.push(one_coin_data);
+					
+					counter++;
+					if (counter == 9){
+						for(var j=0; j < final_list.length; j++ ){
+
+							var coin = final_list[j]['coin'];
+
+							var rowHTML = '<tr><td>'+ final_list[j]['coin'].toUpperCase() +'</td><td>Official Site</td><td>Algorithm</td><td>Wallet</td><td>'+ final_list[j][coin+ "-mbtc"] +'</td><td>'+ final_list[j][coin+ "-usd"] +'</td><td>Cell</td><td><a class="btn btn-primary button1" href="#" role="button"> Start Mining </a></td></tr>';
+						
+							$("table tbody").append(rowHTML);
+
+						}
+					}
 				}
 			})
 		}
