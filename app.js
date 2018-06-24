@@ -57,6 +57,7 @@ $(document).ready( function () {
 			var profit = (hashRate * 86400 / coin_difficulty) * coin_reward
 		}
 		var profit_of_coin = {}
+		profit = profit * 0.00001
 		profit_of_coin[coin] = profit
 		return profit_of_coin
 	}
@@ -105,9 +106,9 @@ $(document).ready( function () {
 
 
 					one_coin_data = {}
-					one_coin_data[success.symbol + "-usd"] = parseFloat((success.market_data.current_price.usd * a[success.symbol]).toFixed(3));
+					one_coin_data[success.symbol + "-usd"] = parseFloat((success.market_data.current_price.usd * a[success.symbol]).toFixed(4));
 
-					one_coin_data[success.symbol + "-mbtc"] = parseFloat((success.market_data.current_price.btc / 1000 * a[success.symbol]).toFixed(3));
+					one_coin_data[success.symbol + "-mbtc"] = parseFloat((success.market_data.current_price.btc * 1000 * a[success.symbol]).toFixed(4));
 						
 					one_coin_data["coin"] =success.symbol;
 
