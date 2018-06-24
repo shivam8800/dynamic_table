@@ -49,7 +49,7 @@ $(document).ready( function () {
 	}, 300000);
 
 
-	function finalProfit(coin_difficulty,coin_reward, coin){
+	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit){
 		var hashRate = $('#hashrate').val();
 		if (hashRate == ""){
 			profit = "NAN"
@@ -57,7 +57,9 @@ $(document).ready( function () {
 			var profit = (hashRate * 86400 / coin_difficulty) * coin_reward
 		}
 		var profit_of_coin = {}
-		profit = profit * 0.00001
+		var decimal = Math.pow(10, (coin_decimal - 1));
+		var unit = coin_unit / decimal
+		profit = profit / unit
 		profit_of_coin[coin] = profit
 		return profit_of_coin
 	}
@@ -76,10 +78,14 @@ $(document).ready( function () {
 						if (success.network.reward){
 							coin_details[item[1] + "-difficulty"] = success.network.difficulty;
 							coin_details[item[1] + "-reward"] = success.network.reward;
+							coin_details[item[1] + "-decimal"] = success.config.coinDecimalPlaces;
+							coin_details[item[1] + "-unit"] = success.config.coinUnits;
 						}
 					} else {
 						coin_details[item[1] + "-difficulty"] = success.network.difficulty;
 						coin_details[item[1] + "-reward"] = success.lastblock.reward;
+						coin_details[item[1] + "-decimal"] = success.config.coinDecimalPlaces;
+						coin_details[item[1] + "-unit"] = success.config.coinUnits;
 					}
 					count++;
 					if (count == 9){
@@ -102,7 +108,7 @@ $(document).ready( function () {
 				success: function(success){
 
 
-					var a = finalProfit(coin_details[success.symbol.toUpperCase() +"-difficulty"], coin_details[success.symbol.toUpperCase() +"-reward"], success.symbol);
+					var a = finalProfit(coin_details[success.symbol.toUpperCase() +"-difficulty"], coin_details[success.symbol.toUpperCase() +"-reward"], success.symbol, coin_details[success.symbol.toUpperCase() + "-decimal"], coin_details[success.symbol.toUpperCase() + "-unit"]);
 
 
 					one_coin_data = {}
