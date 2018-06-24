@@ -105,9 +105,9 @@ $(document).ready( function () {
 
 
 					one_coin_data = {}
-					one_coin_data[success.symbol + "-usd"] = success.market_data.current_price.usd * a[success.symbol];
+					one_coin_data[success.symbol + "-usd"] = parseFloat((success.market_data.current_price.usd * a[success.symbol]).toFixed(3));
 
-					one_coin_data[success.symbol + "-mbtc"] = success.market_data.current_price.btc / 1000 * a[success.symbol];
+					one_coin_data[success.symbol + "-mbtc"] = parseFloat((success.market_data.current_price.btc / 1000 * a[success.symbol]).toFixed(3));
 						
 					one_coin_data["coin"] =success.symbol;
 
