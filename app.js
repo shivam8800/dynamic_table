@@ -97,11 +97,12 @@ $(document).ready( function () {
 		});
 	};
 
-	function get_b2b(){
+	function get_b2b(jugad){
 		var b2b_data = []
 		$.ajax({
 			url: 'https://stocks.exchange/api2/prices',
 			type: 'GET',
+			async: false,
 			success: function(success) {
 				success.forEach(function(value){
 					if (value['market_name'] == 'B2B_BTC') {
@@ -111,29 +112,36 @@ $(document).ready( function () {
 						$.ajax({
 							url: 'https://blockchain.info/ticker',
 							type: 'GET',
+							async: false,
 							success: function(json) {
 								var btc_usd = json['USD']['last']
 								var price_usd = price_btc * btc_usd
-								b2b_data.push(price_usd)
+								b2b_data.push(price_usd);
 							}
 						});
 					};
 				});
 			}
+		})
+		.done(function(){
+			jugad = true;
 		});
-		return b2b_data;
-	};
 
+	    if (jugad == true){
+			return b2b_data;			
+		}
+
+		
+	};
+	// get_b2b();
 	function getProfit(main_list, coin_details){
+		var jugad = false;
     	$("#coins_data > tbody").html("");
 		final_list = []
 		var data = get_b2b();
 		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit']);
 		var b2b_prices = {}
-		console.log(data)
-		data.forEach(function(value){
-			console.log(value);
-		});
+		console.log(data[0], data[1]);
 		b2b_prices['b2b-usd'] = parseFloat((data.price_usd * b2b_profit['b2b']).toFixed(4));
 		b2b_prices['b2b-mbtc'] = parseFloat((data.price_mbtc * b2b_profit['b2b']).toFixed(4));
 		b2b_prices['coin'] = 'b2b';
@@ -161,7 +169,6 @@ $(document).ready( function () {
 					
 					counter++;
 					if (counter == 9){
-						console.log(final_list)
 						function sortOnKeys(array) {
 							var sorted = []
 							for (var i = 0; i < array.length; i++) {
