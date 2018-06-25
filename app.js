@@ -25,12 +25,13 @@ $(document).ready( function () {
     	var valueSelected = this.value;
     	if (valueSelected == "H/s"){
     		var hashrate = $('#hashrate').val() / 1000;
-    		console.log(hashrate)
-    		getProfit(list_coins, coin_details);
+    		getProfit(list_coins, coin_details, hashrate);
     	} else if ( valueSelected == "MH/s"){
     		var hashrate = $('#hashrate').val() * 1000;
-    		console.log(hashrate)
-    		getProfit(list_coins, coin_details);	
+    		getProfit(list_coins, coin_details, hashrate);	
+    	} else {
+    		var hashrate = $('#hashrate').val();
+    		getProfit(list_coins, coin_details, hashrate);
     	}
 	});
 
@@ -63,8 +64,7 @@ $(document).ready( function () {
 	}, 300000);
 
 
-	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit){
-		var hashRate = $('#hashrate').val();
+	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit, hashRate){
 		if (hashRate == ""){
 			profit = 0
 			hashRate =0;
@@ -148,12 +148,12 @@ $(document).ready( function () {
 		
 	};
 	// get_b2b();
-	function getProfit(main_list, coin_details){
+	function getProfit(main_list, coin_details, hashrate){
 		var jugad = false;
     	$("#coins_data > tbody").html("");
 		final_list = []
 		var data = get_b2b();
-		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit']);
+		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit'], hashrate);
 		var b2b_prices = {}
 		b2b_prices['b2b-usd'] = parseFloat((data[1] * b2b_profit['b2b']).toFixed(4));
 		b2b_prices['b2b-mbtc'] = parseFloat((data[0] * b2b_profit['b2b']).toFixed(4));
@@ -168,7 +168,7 @@ $(document).ready( function () {
 				success: function(success){
 
 
-					var a = finalProfit(coin_details[success.symbol.toUpperCase() +"-difficulty"], coin_details[success.symbol.toUpperCase() +"-reward"], success.symbol, coin_details[success.symbol.toUpperCase() + "-decimal"], coin_details[success.symbol.toUpperCase() + "-unit"]);
+					var a = finalProfit(coin_details[success.symbol.toUpperCase() +"-difficulty"], coin_details[success.symbol.toUpperCase() +"-reward"], success.symbol, coin_details[success.symbol.toUpperCase() + "-decimal"], coin_details[success.symbol.toUpperCase() + "-unit"], hashrate);
 
 
 					one_coin_data = {}
