@@ -24,36 +24,40 @@ $(document).ready( function () {
 		var optionSelected = $("option:selected", this);
     	var valueSelected = this.value;
     	if (valueSelected == "H/s"){
-    		var hashrate = $('#hashrate').val($('#hashrate').val() / 1000);
-    		getProfit(list_coins, coin_details);
+    		var hashrate = $('#hashrate').val() / 1000;
+    		getProfit(list_coins, coin_details, hashrate);
     	} else if ( valueSelected == "MH/s"){
-    		var hashrate = $('#hashrate').val($('#hashrate').val() * 1000);
-    		getProfit(list_coins, coin_details);	
+    		var hashrate = $('#hashrate').val() * 1000;
+    		getProfit(list_coins, coin_details, hashrate);	
+    	} else {
+    		var hashrate = $('#hashrate').val();
+    		getProfit(list_coins, coin_details, hashrate);
     	}
 	});
 
 	$("#hashrate").change(function(){
-        getProfit(list_coins, coin_details);
+		var hashrate = $('#hashrate').val()
+        getProfit(list_coins, coin_details, hashrate);
     });
 
     $('#first').click(function(){
-    	$('#hashrate').val(220);
-    	getProfit(list_coins, coin_details);
+    	var hashrate = $('#hashrate').val(220);
+    	getProfit(list_coins, coin_details, hashrate);
     });
     
     $('#second').click(function(){
-    	$('#hashrate').val(20);
-    	getProfit(list_coins, coin_details);
+    	var hashrate = $('#hashrate').val(20);
+    	getProfit(list_coins, coin_details,hashrate);
     });
     
     $('#third').click(function(){
-    	$('#hashrate').val(40);
-    	getProfit(list_coins, coin_details);
+    	var hashrate =$('#hashrate').val(40);
+    	getProfit(list_coins, coin_details,hashrate);
     });
 
     $('#forth').click(function(){
-    	$('#hashrate').val(70);
-    	getProfit(list_coins, coin_details);
+    	var hashrate =$('#hashrate').val(70);
+    	getProfit(list_coins, coin_details,hashrate);
     });
 
 	window.setInterval(function(){
@@ -61,9 +65,8 @@ $(document).ready( function () {
 	}, 300000);
 
 
-	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit){
-		var hashRate = $('#hashrate').val();
-		if (hashRate == ""){
+	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit, hashRate){
+		if (hashRate == undefined){
 			profit = 0
 			hashRate =0;
 		} else {
@@ -151,7 +154,7 @@ $(document).ready( function () {
     	$("#coins_data > tbody").html("");
 		final_list = []
 		var data = get_b2b();
-		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit']);
+		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit'], hashrate);
 		var b2b_prices = {}
 		b2b_prices['b2b-usd'] = parseFloat((data[1] * b2b_profit['b2b']).toFixed(4));
 		b2b_prices['b2b-mbtc'] = parseFloat((data[0] * b2b_profit['b2b']).toFixed(4));
