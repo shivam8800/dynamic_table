@@ -34,7 +34,18 @@
     </div>
     <!-- <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo" style="margin-bottom: 1%;">Hash rate</button> -->
     <!-- <div id="demo" class="collapse">  -->
-      <input class="form-control" id="hashrate" type="text" placeholder="Hashrate..">
+      <div style="display: flex;">
+      <input class="form-control" id="hashrate" type="text" placeholder="Hashrate.." style="width: 90%;">
+      <div class="input-group-btn open">
+        <select id="exampleSelect1" type="button" class="btn btn-default" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+          <div class="dropdown-menu dropdown-menu-right">
+          <option>kH/s</option>
+          <option>H/s</option>
+          <option>MH/s</option>
+        </div>
+        </select>
+      </div>
+      </div>
     <!-- </div> -->
 
   <table class="table table-hover" id="coins_data">

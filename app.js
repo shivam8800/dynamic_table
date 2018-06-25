@@ -20,6 +20,17 @@ $(document).ready( function () {
 		['b2bcoin', 'B2B', 'http://b2b.superpools.online:8117/stats']
 		]
 	
+	$('select').on('change', function (e) {
+		var optionSelected = $("option:selected", this);
+    	var valueSelected = this.value;
+    	if (valueSelected == "H/s"){
+    		var hashrate = $('#hashrate').val() / 1000;
+    		getProfit(list_coins, coin_details);
+    	} else if ( valueSelected == "MH/s"){
+    		var hashrate = $('#hashrate').val() * 1000;
+    		getProfit(list_coins, coin_details);	
+    	}
+	});
 
 	$("#hashrate").change(function(){
         getProfit(list_coins, coin_details);
@@ -53,7 +64,8 @@ $(document).ready( function () {
 	function finalProfit(coin_difficulty,coin_reward, coin, coin_decimal, coin_unit){
 		var hashRate = $('#hashrate').val();
 		if (hashRate == ""){
-			profit = "NAN"
+			profit = 0
+			hashRate =0;
 		} else {
 			var profit = (hashRate * 86400 / coin_difficulty) * coin_reward
 		}
