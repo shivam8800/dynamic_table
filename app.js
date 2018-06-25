@@ -42,22 +42,22 @@ $(document).ready( function () {
 
     $('#first').click(function(){
     	var hashrate = $('#hashrate').val(220);
-    	getProfit(list_coins, coin_details, hashrate);
+    	getProfit(list_coins, coin_details, 220);
     });
     
     $('#second').click(function(){
     	var hashrate = $('#hashrate').val(20);
-    	getProfit(list_coins, coin_details,hashrate);
+    	getProfit(list_coins, coin_details,20);
     });
     
     $('#third').click(function(){
     	var hashrate =$('#hashrate').val(40);
-    	getProfit(list_coins, coin_details,hashrate);
+    	getProfit(list_coins, coin_details,40);
     });
 
     $('#forth').click(function(){
     	var hashrate =$('#hashrate').val(70);
-    	getProfit(list_coins, coin_details,hashrate);
+    	getProfit(list_coins, coin_details,70);
     });
 
 	window.setInterval(function(){
