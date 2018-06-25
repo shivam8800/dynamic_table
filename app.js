@@ -16,7 +16,8 @@ $(document).ready( function () {
 		['sumo','SUMO', 'http://sumo.superpools.online:4117/stats', 'https://api.coingecko.com/api/v3/coins/sumokoin'], 
 		['karbo','KRB', 'http://krb.superpools.online:8117/stats', 'https://api.coingecko.com/api/v3/coins/karbo'], 
 		['newton','NCP', 'http://ncp.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/newton-coin-project'], 
-		['plura','PLURA', 'http://plura.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/pluracoin']
+		['plura','PLURA', 'http://plura.superpools.online:8117/stats','https://api.coingecko.com/api/v3/coins/pluracoin'],
+		['b2bcoin', 'B2B', 'http://b2b.superpools.online:8117/stats']
 		]
 	
 
@@ -88,7 +89,7 @@ $(document).ready( function () {
 						coin_details[item[1] + "-unit"] = success.config.coinUnits;
 					}
 					count++;
-					if (count == 9){
+					if (count == 10){
 						getProfit(main_list, coin_details)
 					}
 				}
@@ -96,11 +97,49 @@ $(document).ready( function () {
 		});
 	};
 
+	function get_b2b(){
+		var b2b_data = []
+		$.ajax({
+			url: 'https://stocks.exchange/api2/prices',
+			type: 'GET',
+			success: function(success) {
+				success.forEach(function(value){
+					if (value['market_name'] == 'B2B_BTC') {
+						var price_btc = value['sell']
+						var price_mbtc = price_btc * 1000
+						b2b_data.push(price_mbtc)
+						$.ajax({
+							url: 'https://blockchain.info/ticker',
+							type: 'GET',
+							success: function(json) {
+								var btc_usd = json['USD']['last']
+								var price_usd = price_btc * btc_usd
+								b2b_data.push(price_usd)
+							}
+						});
+					};
+				});
+			}
+		});
+		return b2b_data;
+	};
+
 	function getProfit(main_list, coin_details){
     	$("#coins_data > tbody").html("");
 		final_list = []
+		var data = get_b2b();
+		var b2b_profit = finalProfit(coin_details['B2B-difficulty'], coin_details['B2B-reward'], 'b2b', coin_details['B2B-decimal'], coin_details['B2B-unit']);
+		var b2b_prices = {}
+		console.log(data)
+		data.forEach(function(value){
+			console.log(value);
+		});
+		b2b_prices['b2b-usd'] = parseFloat((data.price_usd * b2b_profit['b2b']).toFixed(4));
+		b2b_prices['b2b-mbtc'] = parseFloat((data.price_mbtc * b2b_profit['b2b']).toFixed(4));
+		b2b_prices['coin'] = 'b2b';
+		final_list.push(b2b_prices);
 		var counter = 0;
-		for (var i =0; i < main_list.length; i++){
+		for (var i =0; i < (main_list.length - 1); i++){
 			
 			$.ajax({
 				url: main_list[i][3],
@@ -122,6 +161,7 @@ $(document).ready( function () {
 					
 					counter++;
 					if (counter == 9){
+						console.log(final_list)
 						function sortOnKeys(array) {
 							var sorted = []
 							for (var i = 0; i < array.length; i++) {
